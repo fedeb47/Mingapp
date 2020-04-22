@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "943433166198",
+    "firebase_url": "https://sopalonion-7b3a3.firebaseio.com",
+    "project_id": "sopalonion-7b3a3",
+    "storage_bucket": "sopalonion-7b3a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943433166198:android:3651d7b6067593e2aa9e57",
+        "android_client_info": {
+          "package_name": "com.seminario.sopalonion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943433166198-ak8lrai82r5h39rk0en4kdbe7gfvhhj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seminario.sopalonion",
+            "certificate_hash": "6e0cf9d35db62431b2c9314b82956295649b05c4"
+          }
+        },
+        {
+          "client_id": "943433166198-82f2tfs8s1jr7tdg14ta4u9l7pi3rqg4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ2r_yVDFzvtj2w33fNDYHtGvBlSqeQTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943433166198-82f2tfs8s1jr7tdg14ta4u9l7pi3rqg4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
