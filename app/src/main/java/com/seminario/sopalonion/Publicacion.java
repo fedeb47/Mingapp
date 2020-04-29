@@ -3,13 +3,8 @@ package com.seminario.sopalonion;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -52,12 +47,12 @@ public class Publicacion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicacion);
 
-        fotoSubida = (ImageView) findViewById(R.id.fotoSubida);
+        fotoSubida = (ImageView) findViewById(R.id.ivFotoPublicacion);
         tvNombre = (TextView) findViewById(R.id.tvNombre);
-        tvDescripcion = (TextView) findViewById(R.id.textView5);
-        tvPrecio = (TextView) findViewById(R.id.textView7);
+        tvDescripcion = (TextView) findViewById(R.id.tvDescripcion);
+        tvPrecio = (TextView) findViewById(R.id.tvPrecio);
         progressBar = (ProgressBar) findViewById(R.id.progressBar3);
-        tvUser = (TextView) findViewById(R.id.textView8);
+        tvUser = (TextView) findViewById(R.id.tvUser1);
 
         Bundle datos = this.getIntent().getExtras();
         id = datos.getString("id");
@@ -79,7 +74,7 @@ public class Publicacion extends AppCompatActivity {
                 String user = dataSnapshot.child("usuarios").child(userID).child("nombre").getValue(String.class);
 
                 //descripcion = "<b>" + user + ": </b>" + descripcion;
-                // Log.d("LINK DESCARGA", value);
+                //precio = "$ " + precio;
                 tvNombre.setText(nombre);
                 tvUser.setText(user);
                 //tvUser.setTypeface(null, Typeface.BOLD);
@@ -89,7 +84,7 @@ public class Publicacion extends AppCompatActivity {
                 Glide.with(Publicacion.this)
                         .load(link)
                         .fitCenter()
-                        //.centerCrop()
+                        .centerCrop()
                         //.placeholder(R.id.ProgressBar3)
                         .listener(new RequestListener<String, GlideDrawable>() {
                             @Override

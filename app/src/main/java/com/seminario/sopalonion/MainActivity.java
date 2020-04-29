@@ -91,17 +91,10 @@ public class MainActivity extends AppCompatActivity {
         String name = user.getDisplayName();
         String photoUrl = user.getPhotoUrl().toString();
         String ID = user.getUid();
-        photoUrl += "?type=large";
-        usuario = new Usuario(name, photoUrl);
-        usuarioRef.child(ID).setValue(usuario);
-        //String nuevo  = photoUrl.replace("height=100&width=100","height=500&width=500");//replaces all occurrences of "is" to "was"
-        //Uri photoUrl = user.getPhotoUrl();
-        //String photoUrl = profile.getProfilePictureUri(100, 100).toString();
-        String[] arreglo = name.split(" ");
-        //nameTextView.setText(arreglo[0]);
-        nameTextView.setText(arreglo[0]);
-        //Toast.makeText(getApplicationContext(), photoUrl, Toast.LENGTH_SHORT).show();
-        //photoUrl = "https://static5lonelyplanetes.cdnstatics.com/sites/default/files/styles/max_1300x1300/public/blog/argentina_bestintravel2019_nido_huebl_shutterstock_0.jpg?itok=XATeMWcp";
+        photoUrl += "?type=large"; //agrego para que pida la imagen en tamaño grande para mejor calidad
+        usuario = new Usuario(name, photoUrl);  //creo usuario
+        usuarioRef.child(ID).setValue(usuario);  //subo usuario a db
+
         Glide.with(getApplicationContext())
                 .load(photoUrl)
                 //.override(500,500)
@@ -120,11 +113,13 @@ public class MainActivity extends AppCompatActivity {
 
        // profileTracker.stopTracking();
     }
+
     public void crearPublicacion(View view) {
         Intent intent = new Intent(this, SubirPublicacion.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
     public void buscar(View view){
         String string = buscador.getText().toString();
         Intent intent = new Intent(this, Buscador.class);

@@ -14,8 +14,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -62,12 +65,12 @@ public class SubirPublicacion extends AppCompatActivity {
             mStorageRef = FirebaseStorage.getInstance().getReference();
             myRef = FirebaseDatabase.getInstance().getReference();
             etNombre = (EditText) findViewById(R.id.etNombre);
-            etDescripcion = (EditText) findViewById(R.id.editText3);
-            etPrecio = (EditText) findViewById(R.id.editText4);
+            etDescripcion = (EditText) findViewById(R.id.etDescripcion);
+            etPrecio = (EditText) findViewById(R.id.etPrecio);
             progressBar = (ProgressBar) findViewById(R.id.progressBar2);
-            tvPrecio = (TextView) findViewById(R.id.textView6);
+            tvPrecio = (TextView) findViewById(R.id.tvPrecio);
             tvSubirImgen = (TextView) findViewById(R.id.tvSubirImagen);
-            tvError = (TextView) findViewById(R.id.textView9);
+            tvError = (TextView) findViewById(R.id.tvError);
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -113,12 +116,13 @@ public class SubirPublicacion extends AppCompatActivity {
                                     fError(mensajeErorr);
                                 }else{
                                     Log.d("LINK DESCARGA", downloadUri.toString());
-                                    Publi p = new Publi(userID, Nombre, Link, Descripcion, Precio);
-                                    DatabaseReference publi = myRef.child("Publicaciones");
-                                    DatabaseReference userRef = myRef.child("usuarios").child(userID);
-                                    id = publi.push().getKey();
-                                    publi.child(id).setValue(p);
-                                    userRef.child("Publicaciones").child(id).setValue("true");
+                                    Publi p = new Publi(userID, Nombre, Link, Descripcion, Precio);        //creo objeto publicacion
+                                    DatabaseReference publi = myRef.child("Publicaciones");                //referencio las publicaciones
+                                    DatabaseReference userRef = myRef.child("usuarios").child(userID);     //referencio al usuario conectado
+                                    id = publi.push().getKey();                                            //creo y obtengo key para la publicacion
+                                    userRef.child("Publicaciones").push().child(id).setValue("true");
+                                    publi.child(id).setValue(p);                                           //cargo objeto Publicacion a la base de datos
+
                                     Publican();
                                 }
                             }
@@ -193,11 +197,12 @@ public class SubirPublicacion extends AppCompatActivity {
 
     public void cargaOK(){
         progressBar.setVisibility(View.GONE);
-        tvSubirImgen.setText("Subir imagen");
+        tvSubirImgen.setText("Imagen subida exitosamente");
+        tvSubirImgen.setTextColor(Color.RED);
+        tvSubirImgen.setTypeface(null, Typeface.ITALIC);
         etNombre.setVisibility(View.VISIBLE);
         etDescripcion.setVisibility(View.VISIBLE);
         etPrecio.setVisibility(View.VISIBLE);
-        bExaminar.setVisibility(View.VISIBLE);
         bPublicar.setVisibility(View.VISIBLE);
         tvPrecio.setVisibility(View.VISIBLE);
     }
