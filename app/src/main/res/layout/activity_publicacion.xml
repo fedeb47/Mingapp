@@ -47,6 +47,7 @@
             android:id="@+id/tvUser1"
             android:layout_width="224dp"
             android:layout_height="23dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:text="TextView"
             android:textStyle="bold" />

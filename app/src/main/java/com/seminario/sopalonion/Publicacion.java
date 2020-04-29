@@ -71,7 +71,7 @@ public class Publicacion extends AppCompatActivity {
                 String link = dataSnapshot.child("Publicaciones").child(id).child("LinkFoto").getValue(String.class);
                 String descripcion = dataSnapshot.child("Publicaciones").child(id).child("Descripcion").getValue(String.class);
                 String precio = dataSnapshot.child("Publicaciones").child(id).child("Precio").getValue(String.class);
-                String user = dataSnapshot.child("usuarios").child(userID).child("nombre").getValue(String.class);
+                String user = dataSnapshot.child("usuarios").child(userID).child("Nombre").getValue(String.class);
 
                 //descripcion = "<b>" + user + ": </b>" + descripcion;
                 //precio = "$ " + precio;
