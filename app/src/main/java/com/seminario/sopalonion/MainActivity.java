@@ -1,14 +1,13 @@
 package com.seminario.sopalonion;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.Profile;
@@ -16,37 +15,29 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView photoImageView;
-    private TextView nameTextView;
-    private ProfileTracker profileTracker;
-    private Usuario usuario;
-    Profile profile;
+    private ImageView ivFotoPerfil;
+    private TextView tvNombreUser;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
-    DatabaseReference mensajeRef = myRef.child("mensaje");
-    DatabaseReference contenidoRef = myRef.child("contenido");
     DatabaseReference usuarioRef = myRef.child("usuarios");
-    private TextView texto;
-    private TextView buscador;
+    private TextView tvBienvenido;
+    private EditText etBuscador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nameTextView = (TextView) findViewById(R.id.textView4);
-        photoImageView = findViewById((R.id.photoImageView));
-        texto = findViewById(R.id.textView);
-        buscador = findViewById(R.id.editText);
+        tvNombreUser = (TextView) findViewById(R.id.tvNombreUser);
+        ivFotoPerfil = findViewById((R.id.ivFotoPerfil));
+        tvBienvenido = findViewById(R.id.tvBienvenido);
+        etBuscador = findViewById(R.id.etBuscador);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -58,21 +49,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        mensajeRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //contenidoRef.setValue("Hello, World!");
-                Toast.makeText(getApplicationContext(), "entra cuando se modifica el mensaje", Toast.LENGTH_SHORT).show();
-                String value = dataSnapshot.getValue(String.class);
-                texto.setText(value);
-                //Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void goLoginScreen() {
@@ -82,18 +58,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();
-        LoginManager.getInstance().logOut();
-        goLoginScreen();
+        FirebaseAuth.getInstance().signOut();            //Desconecto Firebase
+        LoginManager.getInstance().logOut();             //Desconecto Facebook
+        goLoginScreen();                                 //Vuelvo al Login
     }
 
     private void displayProfileInfo(FirebaseUser user) {
-        String name = user.getDisplayName();
-        String photoUrl = user.getPhotoUrl().toString();
-        String ID = user.getUid();
-        photoUrl += "?type=large"; //agrego para que pida la imagen en tamaño grande para mejor calidad
-        usuario = new Usuario(name, photoUrl);  //creo usuario
-        usuarioRef.child(ID).setValue(usuario);  //subo usuario a db
+        String name = user.getDisplayName();                        //pido nombre de facebook a Firebase
+        String photoUrl = user.getPhotoUrl().toString();            //pido URL de la foto de perfil de Facebook a Firebase
+        String ID = user.getUid();                                  //pido ID de usuario a Firebase
+        photoUrl += "?type=large";                                  //agrego para que pida la imagen en tamaño grande para mejor calidad
+        usuarioRef.child(ID).child("Nombre").setValue(name);       //defino variable Nombre en usuarios
+        usuarioRef.child(ID).child("Foto").setValue(photoUrl);     //defino variable Foto en usuarios con el link de descarga de mi db
+        name = name.split(" ")[0];                           //solo dejo el primer nombre
+        tvNombreUser.setText(name + "!");
 
         Glide.with(getApplicationContext())
                 .load(photoUrl)
@@ -103,27 +81,25 @@ public class MainActivity extends AppCompatActivity {
                 //.placeholder(R.drawable.ic_temp_image) PONER IMAGEN TEMPORAL MIENTRAS SE DESCARGA LA IMAGEN REQUERIDA
                 //.diskCacheStrategy(DiskCacheStrategy.ALL)---ESTRATEGIA DE CACHE A UTILIZAR
                 //.thumbnail(0.5f) ---------------------------DESCARGAR MINIATURA MIENTRAS SE CARGA COMPLETA
-                .into(photoImageView);
+                .into(ivFotoPerfil);
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-       // profileTracker.stopTracking();
     }
 
     public void crearPublicacion(View view) {
         Intent intent = new Intent(this, SubirPublicacion.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     public void buscar(View view){
-        String string = buscador.getText().toString();
-        Intent intent = new Intent(this, Buscador.class);
-        intent.putExtra("string", string);
+        String string = etBuscador.getText().toString();                      //obtengo el string a buscar
+        Intent intent = new Intent(this, Buscador.class);      //creo intent
+        intent.putExtra("string", string);                             //cargo el string intent
         startActivity(intent);
     }
 }

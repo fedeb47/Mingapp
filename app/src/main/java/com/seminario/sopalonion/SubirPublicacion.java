@@ -120,9 +120,8 @@ public class SubirPublicacion extends AppCompatActivity {
                                     DatabaseReference publi = myRef.child("Publicaciones");                //referencio las publicaciones
                                     DatabaseReference userRef = myRef.child("usuarios").child(userID);     //referencio al usuario conectado
                                     id = publi.push().getKey();                                            //creo y obtengo key para la publicacion
-                                    userRef.child("Publicaciones").push().child(id).setValue("true");
+                                    userRef.child("Publicaciones").push().child(id).setValue("true");      //creo una clave para cada publicacion dentro del user (?) sino me pisa el dato
                                     publi.child(id).setValue(p);                                           //cargo objeto Publicacion a la base de datos
-
                                     Publican();
                                 }
                             }
@@ -178,7 +177,7 @@ public class SubirPublicacion extends AppCompatActivity {
        // myRef.child(id).setValue(p);
         //dbPublicacion.setValue(downloadUri);
         Intent intent = new Intent(this, Publicacion.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("user", userID);
         intent.putExtra("id", id);
         startActivity(intent);

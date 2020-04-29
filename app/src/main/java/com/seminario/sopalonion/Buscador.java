@@ -76,7 +76,7 @@ public class Buscador extends AppCompatActivity {
                     String nombre = imageSnapshot.child("Nombre").getValue(String.class);      //Nombre de la publicacion
                     Log.d("REVISANDO---:", nombre);
                     if(nombre.contains(string) && !string.equals("")){     //si el titulo contiene la palabra buscada entro
-                        Log.d("ENTRA A:----", string);
+                        Log.d("ENTRA A:----", nombre);
                         String descripcion = imageSnapshot.child("Descripcion").getValue(String.class);        //nombre de la publicacion
                         String userID = imageSnapshot.child("UserID").getValue(String.class);                  //id del usuario que la publico
                         String link = imageSnapshot.child("LinkFoto").getValue(String.class);                  //Foto de la publicacion
