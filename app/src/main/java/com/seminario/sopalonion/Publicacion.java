@@ -1,12 +1,16 @@
 package com.seminario.sopalonion;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,6 +20,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,16 +35,22 @@ public class Publicacion extends AppCompatActivity {
     private TextView tvPrecio;
     private ProgressBar progressBar;
     private TextView tvUser;
+    private ImageView ivLike;
+    private Button btnEditar;
+    private Button btnEliminar;
 
 
-    private String id;
+    private String publiID;
     private String Nombre;
     private Uri linkFoto;
     private String userID;
     //private String descripcion;
+    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    final String userActivo = user.getUid();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
     DatabaseReference publiRef = myRef.child("Publicaciones");
+    DatabaseReference userRef = myRef.child("usuarios").child(userActivo);
 
     public Publicacion(){}
 
@@ -53,24 +65,35 @@ public class Publicacion extends AppCompatActivity {
         tvPrecio = (TextView) findViewById(R.id.tvPrecio);
         progressBar = (ProgressBar) findViewById(R.id.progressBar3);
         tvUser = (TextView) findViewById(R.id.tvUser1);
+        ivLike = (ImageView) findViewById(R.id.ivLike);
+        btnEditar = (Button) findViewById(R.id.btnEditar);
+        btnEliminar = (Button) findViewById(R.id.btnEliminar);
 
         Bundle datos = this.getIntent().getExtras();
-        id = datos.getString("id");
-        userID = datos.getString("user");
-        Log.d("ID", id);
+        publiID = datos.getString("publiID");                //publicacion ID
+        userID = datos.getString("userID");        //ID de dueño publicacion
+        Log.d("ID dueño", userID);
+        Log.d("ID userOnline", userActivo );
+        //Si soy el dueño de la publicacion se activan los botones de edicion
+        if (userID.equals(userActivo)){
+            btnEditar.setVisibility(View.VISIBLE);
+            btnEliminar.setVisibility(View.VISIBLE);
+        }
     }
 
     protected void onStart() {
         super.onStart();
 
+        //Descargamos la publicacion de la base de datos
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("MYREF", publiID);
                 progressBar.setVisibility(View.VISIBLE);
-                String nombre = dataSnapshot.child("Publicaciones").child(id).child("Nombre").getValue(String.class);
-                String link = dataSnapshot.child("Publicaciones").child(id).child("LinkFoto").getValue(String.class);
-                String descripcion = dataSnapshot.child("Publicaciones").child(id).child("Descripcion").getValue(String.class);
-                String precio = dataSnapshot.child("Publicaciones").child(id).child("Precio").getValue(String.class);
+                String nombre = dataSnapshot.child("Publicaciones").child(publiID).child("Nombre").getValue(String.class);
+                String link = dataSnapshot.child("Publicaciones").child(publiID).child("LinkFoto").getValue(String.class);
+                String descripcion = dataSnapshot.child("Publicaciones").child(publiID).child("Descripcion").getValue(String.class);
+                String precio = dataSnapshot.child("Publicaciones").child(publiID).child("Precio").getValue(String.class);
                 String user = dataSnapshot.child("usuarios").child(userID).child("Nombre").getValue(String.class);
 
                 //descripcion = "<b>" + user + ": </b>" + descripcion;
@@ -84,7 +107,7 @@ public class Publicacion extends AppCompatActivity {
                 Glide.with(Publicacion.this)
                         .load(link)
                         .fitCenter()
-                        .centerCrop()
+                        //.centerCrop()
                         //.placeholder(R.id.ProgressBar3)
                         .listener(new RequestListener<String, GlideDrawable>() {
                             @Override
@@ -106,5 +129,72 @@ public class Publicacion extends AppCompatActivity {
             }
         });
 
+        //vamos a ver si la publi esta likeada
+        userRef.child("Likes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("USEREF", publiID);
+                Boolean isLike = dataSnapshot.child(publiID).exists();
+                if(isLike){
+                    ivLike.setImageResource(R.drawable.ic_corazon);
+                    ivLike.setTag("Like");
+                };
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("CANCELADOOOOO", publiID);
+            }
+        });
+
+    }
+
+    public void like(View view){
+        if(ivLike.getTag().equals("Like")){
+            //userRef.child("Likes").child(id).setValue(false);
+            userRef.child("Likes").child(publiID).removeValue();
+            publiRef.child(publiID).child("Likes").child(user.getUid()).removeValue();
+            ivLike.setImageResource(R.drawable.ic_nolike);
+            ivLike.setTag("Unlike");
+        }else{
+            userRef.child("Likes").child(publiID).setValue(true);
+            publiRef.child(publiID).child("Likes").child(userID).setValue(true);
+            ivLike.setImageResource(R.drawable.ic_corazon);
+            ivLike.setTag("Like");
+        }
+
+    }
+
+    public void perfil(View view){
+        Intent intent = new Intent(this, Perfil.class);
+        intent.putExtra("userID", userID);
+        startActivity(intent);
+    }
+
+    public void editar(View view){
+
+    }
+
+    public void eliminar(View view){
+        Log.d("ELIMINAR", "ENTRA");
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Deseas eliminar la publicacion?");
+        builder.setTitle("ELIMINAR PUBLICACION");
+        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                publiRef.child(publiID).removeValue();
+                userRef.child("Publicaciones").child(publiID).removeValue();
+                perfil(btnEliminar);
+            }
+        });
+        builder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

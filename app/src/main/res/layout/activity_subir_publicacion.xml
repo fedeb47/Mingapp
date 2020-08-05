@@ -35,7 +35,8 @@
             android:layout_height="wrap_content"
             android:textColor="#FF0000"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/etNombre"

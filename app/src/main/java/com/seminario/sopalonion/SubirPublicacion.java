@@ -120,7 +120,7 @@ public class SubirPublicacion extends AppCompatActivity {
                                     DatabaseReference publi = myRef.child("Publicaciones");                //referencio las publicaciones
                                     DatabaseReference userRef = myRef.child("usuarios").child(userID);     //referencio al usuario conectado
                                     id = publi.push().getKey();                                            //creo y obtengo key para la publicacion
-                                    userRef.child("Publicaciones").push().child(id).setValue("true");      //creo una clave para cada publicacion dentro del user (?) sino me pisa el dato
+                                    userRef.child("Publicaciones").child(id).setValue("true");      //creo una clave para cada publicacion dentro del user (?) sino me pisa el dato
                                     publi.child(id).setValue(p);                                           //cargo objeto Publicacion a la base de datos
                                     Publican();
                                 }
@@ -185,7 +185,10 @@ public class SubirPublicacion extends AppCompatActivity {
 
     public void cargando(){
         progressBar.setVisibility(View.VISIBLE);
-        tvSubirImgen.setText("Cargando imagen");
+        //tvSubirImgen.setText("Cargando imagen");
+        tvSubirImgen.setVisibility(View.GONE);
+        tvError.setVisibility(View.VISIBLE);
+        tvError.setText("Cargando imagen");
         etNombre.setVisibility(View.GONE);
         etDescripcion.setVisibility(View.GONE);
         etPrecio.setVisibility(View.GONE);
@@ -197,6 +200,9 @@ public class SubirPublicacion extends AppCompatActivity {
     public void cargaOK(){
         progressBar.setVisibility(View.GONE);
         tvSubirImgen.setText("Imagen subida exitosamente");
+        //tvError.setText("Imagen subida exiosemente");
+        tvError.setVisibility(View.GONE);
+        tvSubirImgen.setVisibility(View.VISIBLE);
         tvSubirImgen.setTextColor(Color.RED);
         tvSubirImgen.setTypeface(null, Typeface.ITALIC);
         etNombre.setVisibility(View.VISIBLE);

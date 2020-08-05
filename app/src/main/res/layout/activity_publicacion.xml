@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Publicacion">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
 
         <TextView
             android:id="@+id/tvNombre"
             android:layout_width="373dp"
             android:layout_height="48dp"
-            android:text="@string/app_name"
             android:layout_marginStart="10dp"
+            android:layout_alignParentTop="true"
             android:textColor="#000000"
             android:textSize="36sp" />
 
@@ -24,41 +21,97 @@
             android:id="@+id/tvPrecio"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_marginStart="10dp"
+            android:layout_below="@id/tvNombre"
             android:textSize="24sp" />
 
-        <ProgressBar
-            android:id="@+id/progressBar3"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="104dp"
-            android:layout_height="86dp"
-            android:layout_marginStart="10dp"
-            android:visibility="gone" />
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="104dp"
+        android:layout_height="86dp"
+        android:layout_below="@id/tvPrecio"
+        android:layout_marginTop="81dp"
+        android:layout_centerHorizontal="true"/>
 
-        <ImageView
+    <ImageView
             android:id="@+id/ivFotoPublicacion"
-            android:layout_width="406dp"
-            android:layout_height="258dp"
+            android:layout_width="match_parent"
+            android:layout_height="253dp"
+            android:layout_below="@id/tvPrecio"
             android:layout_centerHorizontal="true"
             android:background="@color/com_facebook_button_background_color_disabled"
             android:contentDescription="Foto de articulo" />
 
-        <TextView
+
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="99dp"
+        android:layout_height="99dp"
+        android:layout_below="@id/ivFotoPublicacion"
+        android:layout_marginTop="-104dp"
+        android:onClick="like"
+        android:tag="Unlike"
+        app:srcCompat="@drawable/ic_nolike" />
+
+    <TextView
             android:id="@+id/tvUser1"
             android:layout_width="224dp"
             android:layout_height="23dp"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
-            android:text="TextView"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/ivFotoPublicacion"
+            android:onClick="perfil"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvDescripcion"
-            android:layout_width="317dp"
-            android:layout_height="138dp"
-            android:text="Descripcion aqui proximamente...."
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:layout_below="@id/tvUser1"
             android:textSize="14sp" />
-    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnEditar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF5722"
+            android:onClick="editar"
+            android:visibility="invisible"
+            android:text="Editar"
+            android:layout_below="@id/tvDescripcion"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnEliminar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ED1818"
+            android:onClick="eliminar"
+            android:visibility="invisible"
+            android:text="Eliminar"
+            android:layout_below="@id/btnEditar"
+            android:textSize="18sp" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content" >
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#5E35B1"
+            app:itemIconSize="30dp"
+            app:itemIconTint="#FFFFFF"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_navigation" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+</RelativeLayout>

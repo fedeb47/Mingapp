@@ -1,90 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingBottom="0dp"
+    android:paddingTop="0dp"
     tools:context=".MainActivity">
 
+    <!--Your comment
 
-    <TextView
-        android:id="@+id/tvBienvenido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/bienvenido"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvNombreUser"
-        android:layout_width="141dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/tvBienvenido"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/ivFotoPerfil"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/colorAccent"
-        android:contentDescription="Foto Perfil"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+-->
 
     <EditText
         android:id="@+id/etBuscador"
         android:layout_width="368dp"
         android:layout_height="42dp"
-        android:layout_marginTop="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"
         android:ems="10"
         android:hint="Busca por producto o ubicacion"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
-        app:layout_constraintTop_toBottomOf="@+id/tvBienvenido"
-        app:layout_constraintVertical_bias="0.21"
-        tools:layout_editor_absoluteX="16dp" />
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/btnBuscar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="119dp"
+        android:layout_height="59dp"
+        android:layout_below="@id/etBuscador"
+        android:layout_centerHorizontal="true"
         android:onClick="buscar"
         android:text="Buscar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etBuscador" />
+        android:textSize="20dp" />
 
-    <Button
-        android:id="@+id/btnLogout"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="133dp"
-        android:layout_height="64dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="logout"
-        android:text="@string/logout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.003"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/btnSubir"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="crearPublicacion"
-        android:text="Subir Articulo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#5E35B1"
+            app:itemIconSize="30dp"
+            app:itemIconTint="#FFFFFF"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_navigation" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+</RelativeLayout>

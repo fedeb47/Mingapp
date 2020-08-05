@@ -1,9 +1,11 @@
 package com.seminario.sopalonion;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String userID;
     private ImageView ivFotoPerfil;
     private TextView tvNombreUser;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -28,23 +32,46 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference usuarioRef = myRef.child("usuarios");
     private TextView tvBienvenido;
     private EditText etBuscador;
+    private BottomNavigationView barra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvNombreUser = (TextView) findViewById(R.id.tvNombreUser);
         ivFotoPerfil = findViewById((R.id.ivFotoPerfil));
-        tvBienvenido = findViewById(R.id.tvBienvenido);
         etBuscador = findViewById(R.id.etBuscador);
+        barra = findViewById(R.id.bottom_navigation);
+
+        barra.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
 
         if (user != null) {
-            displayProfileInfo(user);
+            //displayProfileInfo(user);
         } else goLoginScreen();
     }
+
+    //barra de navegacion
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
+            new BottomNavigationView.OnNavigationItemSelectedListener(){
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
+                    Intent intent;
+                    switch (menuItem.getItemId()){
+                        case R.id.nav_add:
+                            intent = new Intent(MainActivity.this, SubirPublicacion.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_perfil:
+                            intent = new Intent(MainActivity.this, Perfil.class);
+                            intent.putExtra("userID", userID);
+                            startActivity(intent);
+                    }
+
+                    return true;
+                }
+            };
 
     @Override
     protected void onStart() {
