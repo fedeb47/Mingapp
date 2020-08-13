@@ -1,53 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SubirPublicacion">
+    tools:context="com.seminario.mingapp.SubirPublicacion">
 
 
     <TextView
         android:id="@+id/tvCrearPublicacion"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="34dp"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:text="Crear Publicacion"
         android:textColor="#FF5722"
         android:textSize="24sp"
+        android:textStyle="bold"
         tools:layout_editor_absoluteX="112dp" />
 
-    <LinearLayout
-        android:layout_width="350dp"
+
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCrearPublicacion">
+        android:textColor="#FF0000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        android:layout_below="@id/tvCrearPublicacion"/>
 
-        <TextView
-            android:id="@+id/tvError"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FF0000"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvError"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Nombre del producto"
+        android:inputType="textPersonName"
+        android:textColor="#000000" />
 
-        <EditText
-            android:id="@+id/etNombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Nombre del producto"
-            android:inputType="textPersonName"
-            android:textColor="#000000" />
-
-        <EditText
+    <EditText
             android:id="@+id/etDescripcion"
             android:layout_width="match_parent"
             android:layout_height="128dp"
@@ -56,7 +50,10 @@
             android:hint="Descripcion"
             android:inputType="textMultiLine"
             android:lines="4"
-            android:singleLine="false" />
+            android:singleLine="false"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/etNombre"/>
 
         <TextView
             android:id="@+id/tvSubirImagen"
@@ -64,28 +61,39 @@
             android:layout_height="25dp"
             android:text="Subir Imagen"
             android:textSize="18sp"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/etDescripcion"/>
 
         <ProgressBar
             android:id="@+id/progressBar2"
             style="?android:attr/progressBarStyle"
             android:layout_width="160dp"
             android:layout_height="140dp"
-            android:visibility="gone" />
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
 
-        <Button
-            android:id="@+id/bExaminar"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:text="Examinar"
-            android:textSize="18sp" />
+    <Button
+        android:id="@+id/bExaminar"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_below="@id/tvSubirImagen"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#000000"
+        android:text="Examinar"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvPrecio"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:text="Precio:"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/bExaminar"/>
 
         <EditText
             android:id="@+id/etPrecio"
@@ -94,15 +102,53 @@
             android:ems="10"
             android:hint="$"
             android:inputType="number"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tvPrecio"/>
 
-        <Button
-            android:id="@+id/bPublicar"
+    <Button
+        android:id="@+id/bPublicar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etPrecio"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#00ACC1"
+        android:text="Publicar"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/bEditar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etPrecio"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="#00ACC1"
+        android:text="Finalizar edicion"
+        android:visibility="invisible"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content" >
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Publicar"
-            android:textSize="24sp" />
+            android:background="#5E35B1"
+            app:itemIconSize="30dp"
+            app:itemIconTint="#FFFFFF"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_navigation" />
 
-    </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</RelativeLayout>

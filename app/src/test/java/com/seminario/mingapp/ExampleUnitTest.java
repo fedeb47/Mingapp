@@ -1,4 +1,4 @@
-package com.seminario.sopalonion;
+package com.seminario.mingapp;
 
 import org.junit.Test;
 

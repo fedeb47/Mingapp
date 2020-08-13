@@ -1,4 +1,4 @@
-package com.seminario.sopalonion;
+package com.seminario.mingapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +23,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.seminario.mingapp.R;
 
 
 public class activity_login extends AppCompatActivity {

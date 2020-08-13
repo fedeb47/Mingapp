@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_login">
+    tools:context="com.seminario.mingapp.activity_login">
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"

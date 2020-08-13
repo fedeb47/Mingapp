@@ -1,4 +1,4 @@
-package com.seminario.sopalonion;
+package com.seminario.mingapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -18,21 +19,23 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.seminario.mingapp.Modelos.Publi;
+import com.seminario.mingapp.R;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SubirPublicacion extends AppCompatActivity {
         private Usuario Usuario;
-        private Fotos Fotos;
-        private Rubro Rubro;
         private Usuario[] Likes;
-        private Comentarios Comentarios;
 
         private String userID;
         private String id;
@@ -47,10 +50,13 @@ public class SubirPublicacion extends AppCompatActivity {
         private EditText etPrecio;
         private Button bExaminar;
         private Button bPublicar;
+        private Button bEditar;
         private ProgressBar progressBar;
         private TextView tvPrecio;
         private TextView tvSubirImgen;
         private TextView tvError;
+        private BottomNavigationView barra;
+        private String publiID;
 
         private StorageReference mStorageRef;
         private DatabaseReference myRef;
@@ -71,13 +77,16 @@ public class SubirPublicacion extends AppCompatActivity {
             tvPrecio = (TextView) findViewById(R.id.tvPrecio);
             tvSubirImgen = (TextView) findViewById(R.id.tvSubirImagen);
             tvError = (TextView) findViewById(R.id.tvError);
+            barra = findViewById(R.id.bottom_navigation);
+
+            barra.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
             if (user != null) {
                 userID = user.getUid();
             }
 
+            //EXAMINAR IMAGEN EN GALERIA LOCAL
             bExaminar = (Button) findViewById(R.id.bExaminar);
             bExaminar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,6 +98,7 @@ public class SubirPublicacion extends AppCompatActivity {
                 }
             });
 
+            //PUBLICAR
             bPublicar = (Button) findViewById(R.id.bPublicar);
             bPublicar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -129,7 +139,78 @@ public class SubirPublicacion extends AppCompatActivity {
                     }
                 }
             });
+
+            //EDITAR PUBLICACION
+            bEditar = (Button) findViewById(R.id.bEditar);
+            bEditar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Nombre = etNombre.getText().toString();
+                    Descripcion = etDescripcion.getText().toString();
+                    Precio = (etPrecio.getText().toString());
+                    Log.d("-----NOMBRE-----", Nombre);
+                    if(Nombre.length() == 0){
+                        mensajeErorr = "Debes ponerle un nombre a la publicacion";
+                        fError(mensajeErorr);
+                    }else{
+                        if(Descripcion.length() == 0){
+                            mensajeErorr = "Debes ponerle una descripcion al articulo";
+                            fError(mensajeErorr);
+                        }
+                        else{
+                            if(Precio.length() == 0){
+                                mensajeErorr = "Debes ponerle un precio al articulo";
+                                fError(mensajeErorr);
+                            }else{
+                                Publi p = new Publi(userID, Nombre, Link, Descripcion, Precio);        //creo objeto publicacion
+                                Map<String, Object> publiEdit = new HashMap<>();
+                                publiEdit.put("Nombre", Nombre);
+                                publiEdit.put("Descripcion", Descripcion);
+                                publiEdit.put("Precio", Precio);
+                                DatabaseReference publi = myRef.child("Publicaciones");                //referencio las publicaciones
+                                publi.child(publiID).updateChildren(publiEdit);      //creo una clave para cada publicacion dentro del user (?) sino me pisa el dato
+                               //cargo objeto Publicacion a la base de datos
+                                Publican();
+                            }
+                        }
+                    }
+                }
+            });
+
+            //EDITAR PUBLICACION
+            Bundle datos = this.getIntent().getExtras();
+            try {
+                publiID = datos.getString("publiID");
+                etNombre.setText(datos.getString("nombre"));
+                etDescripcion.setText(datos.getString("descripcion"));
+                etPrecio.setText(datos.getString("precio"));
+                bExaminar.setVisibility(View.GONE);
+                bPublicar.setVisibility(View.GONE);
+                bEditar.setVisibility(View.VISIBLE);
+            }catch(Exception e){ };
         }
+
+    //barra de navegacion
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
+            new BottomNavigationView.OnNavigationItemSelectedListener(){
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
+                    Intent intent;
+                    switch (menuItem.getItemId()){
+                        case R.id.nav_add:
+                            intent = new Intent(SubirPublicacion.this, SubirPublicacion.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_perfil:
+                            intent = new Intent(SubirPublicacion.this, Perfil.class);
+                            intent.putExtra("userID", userID);
+                            startActivity(intent);
+                        case R.id.nav_search:
+                            intent = new Intent(SubirPublicacion.this, MainActivity.class);
+                            startActivity(intent);
+                    }
+                    return true;
+                }
+            };
 
 
     @Override
@@ -145,9 +226,6 @@ public class SubirPublicacion extends AppCompatActivity {
             filePath.putFile(uri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    //Toast.makeText(SubirPublicacion.this, linkDescarga.toString(), Toast.LENGTH_LONG).show();
-                    //Log.d("LINK DESCARGA", linkDescarga.toString());
-                    //return filePath.getDownloadUrl();
                     if (!task.isSuccessful()) {
                         throw task.getException();
                     }
@@ -169,23 +247,15 @@ public class SubirPublicacion extends AppCompatActivity {
     }
 
     public void Publican(){
-        //Nombre = etNombre.getText().toString();
-        //Log.d("LINK DESCARGA", downloadUri.toString());
-        // Publicacion p = new Publicacion(downloadUri);
-       // String id = myRef.push().getKey();
-       // Publi p = new Publi(Nombre, downloadUri);
-       // myRef.child(id).setValue(p);
-        //dbPublicacion.setValue(downloadUri);
         Intent intent = new Intent(this, Publicacion.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("user", userID);
-        intent.putExtra("id", id);
+        intent.putExtra("userID", userID);
+        intent.putExtra("publiID", publiID);
         startActivity(intent);
     }
 
     public void cargando(){
         progressBar.setVisibility(View.VISIBLE);
-        //tvSubirImgen.setText("Cargando imagen");
         tvSubirImgen.setVisibility(View.GONE);
         tvError.setVisibility(View.VISIBLE);
         tvError.setText("Cargando imagen");
@@ -200,7 +270,6 @@ public class SubirPublicacion extends AppCompatActivity {
     public void cargaOK(){
         progressBar.setVisibility(View.GONE);
         tvSubirImgen.setText("Imagen subida exitosamente");
-        //tvError.setText("Imagen subida exiosemente");
         tvError.setVisibility(View.GONE);
         tvSubirImgen.setVisibility(View.VISIBLE);
         tvSubirImgen.setTextColor(Color.RED);
@@ -213,7 +282,6 @@ public class SubirPublicacion extends AppCompatActivity {
     }
 
     public void fError(String er){
-        //etNombre.setVisibility(View.GONE);
         tvError.setVisibility(View.VISIBLE);
         tvError.setText(er);
     }

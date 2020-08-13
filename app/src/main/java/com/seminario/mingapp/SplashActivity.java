@@ -1,6 +1,4 @@
-package com.seminario.sopalonion;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.seminario.mingapp;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+
+import com.seminario.mingapp.R;
 
 public class SplashActivity extends Activity {
 

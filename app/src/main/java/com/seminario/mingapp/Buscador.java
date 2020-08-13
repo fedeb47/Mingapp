@@ -1,7 +1,10 @@
-package com.seminario.sopalonion;
+package com.seminario.mingapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,23 +25,30 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.seminario.mingapp.Adapter.BusquedaAdapter;
+import com.seminario.mingapp.Adapter.FotoAdapter;
+import com.seminario.mingapp.R;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Buscador extends AppCompatActivity {
     private String string;
     private TextView tvUser1;
-    private TextView tvDescripcion1;
-    private TextView tvNombre;
     private TextView tvBusqueda;
-    private ImageView iv1;
-    private ImageButton dos;
-    private ProgressBar progressBar;
     private ImageButton btnBuscar;
     private EditText etBuscar;
-    private String descripcion;
     private String userID;
     private String link;
     private String publiID;
+
     private BottomNavigationView barra;
+
+    RecyclerView recyclerView;
+    BusquedaAdapter busquedaAdapter;
+    List<List<String>> lista;
+    List<String> publicacion;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
@@ -48,16 +58,31 @@ public class Buscador extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscador);
 
-        iv1 = (ImageView) findViewById(R.id.ivFoto1);
         tvUser1 = (TextView) findViewById(R.id.tvUser1);
-        tvDescripcion1 = (TextView) findViewById(R.id.tvDescripcion1);
-        tvNombre = (TextView) findViewById(R.id.tvNombre);
         tvBusqueda = (TextView) findViewById(R.id.tvBusqueda);
         btnBuscar = (ImageButton) findViewById(R.id.btnBuscar);
         etBuscar = (EditText) findViewById(R.id.etBuscar);
         barra = findViewById(R.id.bottom_navigation);
-
         barra.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
+        lista = new ArrayList<>();
+        resultado();
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new GridLayoutManager(this,2);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        Log.d("lista antes de enviar", lista.toString());
+        busquedaAdapter = new BusquedaAdapter(this, lista);
+        busquedaAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publicacion = lista.get(recyclerView.getChildAdapterPosition(v));
+                Intent intent = new Intent(Buscador.this, Publicacion.class);
+                intent.putExtra("publiID", publicacion.get(0));                                     //ID de la publicacion
+                startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(busquedaAdapter);
 
         //Recibimos los datos enviados desde el main con el string a buscar denominado "string"
         Bundle datos = this.getIntent().getExtras();
@@ -88,77 +113,42 @@ public class Buscador extends AppCompatActivity {
                 }
             };
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    public void resultado(){
         //Query q = myRef.child("Publicaciones").orderByChild("Lugar").equalTo(string);         //consulto en publicaciones un nombre igual al buscado
         Query q = myRef.child("Publicaciones").orderByChild("Nombre");                         //pido todas las publicaciones
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot imageSnapshot: dataSnapshot.getChildren()) {                 //recorro snapshot de todas las publicaciones recibidas
+                    publicacion = new ArrayList<>();
                     String nombre = imageSnapshot.child("Nombre").getValue(String.class);      //Nombre de la publicacion
-                    Log.d("REVISANDO---:", nombre);
                     if(nombre != null && string != null){
                         if(nombre.contains(string) && !string.equals("")){     //si el titulo contiene la palabra buscada entro
-                            Log.d("ENTRA A:----", nombre);
+                            //Log.d("ENTRA A:----", nombre);
                             publiID = imageSnapshot.getKey();
-                            Log.d("PUBLI ID:----", publiID);
-                            descripcion = imageSnapshot.child("Descripcion").getValue(String.class);        //nombre de la publicacion
+                            //Log.d("PUBLI ID:----", publiID);
                             userID = imageSnapshot.child("UserID").getValue(String.class);                  //id del usuario que la publico
                             link = imageSnapshot.child("LinkFoto").getValue(String.class);                  //Foto de la publicacion
-                            tvDescripcion1.setText(descripcion);
-                            tvNombre.setText(nombre);
 
-
-
-                            Glide.with(Buscador.this)
-                                    .load(link)
-                                    .fitCenter()
-                                    //.centerCrop()
-                                    .placeholder(R.drawable.loading)
-                                    /*       .listener(new RequestListener<String, GlideDrawable>() {
-                                               @Override
-                                               public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                                   return false;
-                                               }
-
-                                               @Override
-                                               public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                                   //progressBar.setVisibility(View.GONE);
-                                                   return false;
-                                               }
-                                           })*/
-                                    .into(iv1);
-
-                            Query q = myRef.child("usuarios").child(userID);               //mediante el userid sacamos los datos del usuario
-                            q.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    String nombre = dataSnapshot.child("nombre").getValue(String.class); //nombre del usuario
-                                    tvUser1.setText(nombre);
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {    }
-                            });
+                            publicacion.add(publiID);
+                            publicacion.add(nombre);
+                            publicacion.add(link);
+                            lista.add(publicacion);
                         }
                     }
-
-
                 }
-                if(tvNombre.getText().equals("")){
-                    tvNombre.setText("No se encontraron resultados");
+                if(tvBusqueda.getText().equals("")){
+                    tvBusqueda.setText("No se encontraron resultados");
                 }
-
+                Collections.reverse(lista);
+                Log.d("listaBuscador", lista.toString());
+                busquedaAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {        }
 
         });
-
-
     }
 
     public void buscar(View view){
@@ -171,7 +161,7 @@ public class Buscador extends AppCompatActivity {
 
     public void publicacion(View view){
         Intent intent = new Intent(this, Publicacion.class);
-        intent.putExtra("userID", userID);                               //ID del usuario creador
+       // intent.putExtra("userID", userID);                               //ID del usuario creador
         intent.putExtra("publiID", publiID);                                     //ID de la publicacion
         startActivity(intent);
     }

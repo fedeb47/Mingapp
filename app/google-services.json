@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:943433166198:android:3651d7b6067593e2aa9e57",
         "android_client_info": {
-          "package_name": "com.seminario.sopalonion"
+          "package_name": "com.seminario.mingapp"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "943433166198-ak8lrai82r5h39rk0en4kdbe7gfvhhj8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.seminario.sopalonion",
+            "package_name": "com.seminario.mingapp",
             "certificate_hash": "6e0cf9d35db62431b2c9314b82956295649b05c4"
           }
         },

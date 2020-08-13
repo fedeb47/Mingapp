@@ -1,4 +1,4 @@
-package com.seminario.sopalonion;
+package com.seminario.mingapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,14 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.seminario.mingapp.R;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
         barra.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
+
 
         if (user != null) {
-            //displayProfileInfo(user);
+            userID = user.getUid();
         } else goLoginScreen();
     }
 

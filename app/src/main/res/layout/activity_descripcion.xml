@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.seminario.mingapp.Descripcion">
+
+
+    <TextView
+        android:id="@+id/tvEditar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F4511E"
+        android:minLines="1"
+        android:maxLines="10"
+        android:text="Editar descripcion"
+        android:textColor="#FFFFFF"
+        android:textSize="30dp" />
+
+
+    <EditText
+        android:id="@+id/etDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/tvEditar"
+        android:layout_marginTop="23dp"
+        android:ems="10"
+        android:hint="Escriba su descripcion aqui..."
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btnAceptar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etDescripcion"
+        android:layout_marginTop="10dp"
+        android:background="#27D800"
+        android:text="Aceptar"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAceptar"
+        android:layout_marginTop="5dp"
+        android:background="#FF0000"
+        android:text="Cancelar"
+        android:textSize="20dp" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content" >
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#5E35B1"
+            app:itemIconSize="30dp"
+            app:itemIconTint="#FFFFFF"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_navigation" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</RelativeLayout>

@@ -4,15 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Publicacion">
+    tools:context="com.seminario.mingapp.Publicacion">
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/tvNombre"
             android:layout_width="373dp"
             android:layout_height="48dp"
-            android:layout_marginStart="10dp"
             android:layout_alignParentTop="true"
             android:textColor="#000000"
             android:textSize="36sp" />
@@ -92,6 +97,9 @@
             android:text="Eliminar"
             android:layout_below="@id/btnEditar"
             android:textSize="18sp" />
+
+        </RelativeLayout>
+    </ScrollView>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/bottom"

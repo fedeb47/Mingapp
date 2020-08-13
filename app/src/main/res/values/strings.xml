@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sopalonion</string>
+    <string name="app_name">Mingapp</string>
     <string name="facebook_app_id">2663827907187751</string>
     <string name="fb_login_protocol_scheme">fb2663827907187751</string>
     <string name="error_login">Error al loguearse</string>
@@ -7,4 +7,5 @@
     <string name="logout">logout</string>
     <string name="firebase_error_login">firebase_error_login</string>
     <string name="entra">ENTRA</string>
+    <color name="grey">#A9A9A9</color>
 </resources>
