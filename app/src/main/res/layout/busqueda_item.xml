@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
+    android:layout_marginTop="10dp"
     android:background="@color/grey">
 
     <TextView
@@ -33,9 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvNombre"
-        android:layout_alignLeft="@id/tvNombre"
-        android:layout_marginTop="10dp"
-        android:onClick="publicacion" />
+        android:layout_alignLeft="@id/tvNombre" />
 
 
 </RelativeLayout>

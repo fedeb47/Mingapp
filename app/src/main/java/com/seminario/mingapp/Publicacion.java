@@ -52,8 +52,6 @@ public class Publicacion extends AppCompatActivity {
     DatabaseReference publiRef = myRef.child("Publicaciones");
     DatabaseReference userRef = myRef.child("usuarios").child(userActivo);
 
-    public Publicacion(){}
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

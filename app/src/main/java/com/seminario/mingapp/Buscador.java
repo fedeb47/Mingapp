@@ -77,6 +77,7 @@ public class Buscador extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 publicacion = lista.get(recyclerView.getChildAdapterPosition(v));
+                Log.d("ONCLICK", publicacion.toString());
                 Intent intent = new Intent(Buscador.this, Publicacion.class);
                 intent.putExtra("publiID", publicacion.get(0));                                     //ID de la publicacion
                 startActivity(intent);
