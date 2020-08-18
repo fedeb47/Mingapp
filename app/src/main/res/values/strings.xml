@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Mingapp</string>
-    <string name="facebook_app_id">2663827907187751</string>
-    <string name="fb_login_protocol_scheme">fb2663827907187751</string>
+    <string name="facebook_app_id">227937285187589</string>
+    <string name="fb_login_protocol_scheme">fb227937285187589</string>
     <string name="error_login">Error al loguearse</string>
     <string name="cancel_login">Login cancelado</string>
     <string name="logout">logout</string>
