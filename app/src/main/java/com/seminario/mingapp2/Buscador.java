@@ -57,6 +57,7 @@ public class Buscador extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscador);
+        Log.d("ACTIVITY----", this.toString());
 
         tvUser1 = (TextView) findViewById(R.id.tvUser1);
         tvBusqueda = (TextView) findViewById(R.id.tvBusqueda);
@@ -105,11 +106,17 @@ public class Buscador extends AppCompatActivity {
                             intent = new Intent(Buscador.this, Perfil.class);
                             intent.putExtra("userID", userID);
                             startActivity(intent);
+                            break;
                         case R.id.nav_search:
                             intent = new Intent(Buscador.this, MainActivity.class);
                             startActivity(intent);
+                            break;
+                        case R.id.nav_favs:
+                            intent = new Intent(Buscador.this, Favoritos.class);
+                            //intent.putExtra("userID", userID);
+                            startActivity(intent);
+                            break;
                     }
-
                     return true;
                 }
             };

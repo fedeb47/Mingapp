@@ -1,4 +1,6 @@
-package com.seminario.mingapp2;
+package com.seminario.mingapp2.Modelos;
+
+import com.seminario.mingapp2.SubirPublicacion;
 
 public class Usuario {
 

@@ -56,6 +56,7 @@ public class Publicacion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicacion);
+        Log.d("ACTIVITY----", this.toString());
 
         fotoSubida = (ImageView) findViewById(R.id.ivFotoPublicacion);
         tvNombre = (TextView) findViewById(R.id.tvNombre);
@@ -166,9 +167,16 @@ public class Publicacion extends AppCompatActivity {
                             intent = new Intent(Publicacion.this, Perfil.class);
                             intent.putExtra("userID", userActivo);
                             startActivity(intent);
+                            break;
+                        case R.id.nav_favs:
+                            intent = new Intent(Publicacion.this, Favoritos.class);
+                            //intent.putExtra("userID", userID);
+                            startActivity(intent);
+                            break;
                         case R.id.nav_search:
                             intent = new Intent(Publicacion.this, MainActivity.class);
                             startActivity(intent);
+                            break;
                     }
 
                     return true;

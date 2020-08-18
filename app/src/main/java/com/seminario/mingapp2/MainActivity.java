@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("ACTIVITY----", this.toString());
 
         etBuscador = findViewById(R.id.etBuscador);
         barra = findViewById(R.id.bottom_navigation);
@@ -67,12 +68,17 @@ public class MainActivity extends AppCompatActivity {
                             intent.putExtra("userID", userID);
                             Log.d("saliendo del main", userID);
                             startActivity(intent);
+                            break;
                         case R.id.nav_favs:
                             intent = new Intent(MainActivity.this, Favoritos.class);
                             //intent.putExtra("userID", userID);
                             startActivity(intent);
+                            break;
+                        case R.id.nav_search:
+                            intent = new Intent(MainActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            break;
                     }
-
                     return true;
                 }
             };
@@ -88,11 +94,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();            //Desconecto Firebase
-        LoginManager.getInstance().logOut();             //Desconecto Facebook
-        goLoginScreen();                                 //Vuelvo al Login
-    }
 
     private void displayProfileInfo(FirebaseUser user) {
         Log.d("userid en display", userID);
@@ -111,12 +112,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    public void crearPublicacion(View view) {
-        Intent intent = new Intent(this, SubirPublicacion.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
     public void buscar(View view){

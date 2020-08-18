@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Favoritos extends AppCompatActivity {
-    private String userID;
+    private String userActivo;
     RecyclerView recyclerView;
     FavoritosAdapter favAdapter;
     List<String> lista;
@@ -42,9 +42,10 @@ public class Favoritos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favoritos);
+        Log.d("ACTIVITY----", this.toString());
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {        userID = user.getUid();        }
+        if (user != null) {        userActivo = user.getUid();        }
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
@@ -56,17 +57,16 @@ public class Favoritos extends AppCompatActivity {
         myRef.child("usuarios").child(user.getUid()).child("Likes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //lista = dataSnapshot.getChildren().toString();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    lista.add(snapshot.getValue(String.class));
+                }
                 Log.d("AAAAAAAAAAA", dataSnapshot.getChildren().toString());
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("publicaciones--", "cancelado");
             }
         });
-
 
 
         favAdapter = new FavoritosAdapter(this, publicaciones);
@@ -81,13 +81,12 @@ public class Favoritos extends AppCompatActivity {
         });
         recyclerView.setAdapter(favAdapter);
 
-
         Log.d("1111111111-", lista.toString());
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         Log.d("22222222-", lista.toString());
         publis(lista);
         Log.d("3333333-", lista.toString());
@@ -126,6 +125,7 @@ public class Favoritos extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
             new BottomNavigationView.OnNavigationItemSelectedListener(){
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
+                    Log.d("BARRA NAVEGADORA", "entraaa  " + userActivo);
                     Intent intent;
                     switch (menuItem.getItemId()){
                         case R.id.nav_add:
@@ -134,14 +134,19 @@ public class Favoritos extends AppCompatActivity {
                             break;
                         case R.id.nav_perfil:
                             intent = new Intent(Favoritos.this, Perfil.class);
-                            intent.putExtra("userID", userID);
+                            intent.putExtra("userID", userActivo);
                             startActivity(intent);
+                            break;
                         case R.id.nav_favs:
                             intent = new Intent(Favoritos.this, Favoritos.class);
                             //intent.putExtra("userID", userID);
                             startActivity(intent);
+                            break;
+                        case R.id.nav_search:
+                            intent = new Intent(Favoritos.this, MainActivity.class);
+                            startActivity(intent);
+                            break;
                     }
-
                     return true;
                 }
             };

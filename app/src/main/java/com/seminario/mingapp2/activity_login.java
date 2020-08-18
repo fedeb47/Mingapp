@@ -40,6 +40,7 @@ public class activity_login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Log.d("ACTIVITY----", this.toString());
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);

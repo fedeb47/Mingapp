@@ -57,6 +57,7 @@ public class Perfil extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
+        Log.d("ACTIVITY----", this.toString());
         Log.d("creando perfil!!!!", user.getUid());
 
         ivFotoPerfil = (ImageView) findViewById(R.id.ivFotoPerfil);
@@ -116,9 +117,16 @@ public class Perfil extends AppCompatActivity {
                         case R.id.nav_search:
                             intent = new Intent(Perfil.this, MainActivity.class);
                             startActivity(intent);
+                            break;
+                        case R.id.nav_favs:
+                            intent = new Intent(Perfil.this, Favoritos.class);
+                            //intent.putExtra("userID", userID);
+                            startActivity(intent);
+                            break;
                         case R.id.nav_perfil:
                             intent = new Intent(Perfil.this, Perfil.class);
                             startActivity(intent);
+                            break;
                     }
 
                     return true;

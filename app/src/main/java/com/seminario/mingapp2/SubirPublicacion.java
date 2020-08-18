@@ -28,13 +28,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.seminario.mingapp2.Modelos.Publi;
-import com.seminario.mingapp2.R;
+import com.seminario.mingapp2.Modelos.Usuario;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SubirPublicacion extends AppCompatActivity {
-        private Usuario Usuario;
+        private com.seminario.mingapp2.Modelos.Usuario Usuario;
         private Usuario[] Likes;
 
         private String userID;
@@ -67,6 +67,8 @@ public class SubirPublicacion extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_subir_publicacion);
+            Log.d("ACTIVITY----", this.toString());
+
             //Toast.makeText(getApplicationContext(), "oncreate", Toast.LENGTH_SHORT).show();
             mStorageRef = FirebaseStorage.getInstance().getReference();
             myRef = FirebaseDatabase.getInstance().getReference();
@@ -204,9 +206,16 @@ public class SubirPublicacion extends AppCompatActivity {
                             intent = new Intent(SubirPublicacion.this, Perfil.class);
                             intent.putExtra("userID", userID);
                             startActivity(intent);
+                            break;
+                        case R.id.nav_favs:
+                            intent = new Intent(SubirPublicacion.this, Favoritos.class);
+                            //intent.putExtra("userID", userID);
+                            startActivity(intent);
+                            break;
                         case R.id.nav_search:
                             intent = new Intent(SubirPublicacion.this, MainActivity.class);
                             startActivity(intent);
+                            break;
                     }
                     return true;
                 }

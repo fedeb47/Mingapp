@@ -1,14 +1,17 @@
 package com.seminario.mingapp2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +27,7 @@ public class Descripcion extends AppCompatActivity {
     DatabaseReference myRef = database.getReference();
     DatabaseReference usuarioRef = myRef.child("usuarios");
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    String userID = user.getUid();
+    String userActivo = user.getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,9 @@ public class Descripcion extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("descipcionnnnnn", String.valueOf(etDescripcion.getText()));
-                usuarioRef.child(userID).child("Descripcion").setValue(etDescripcion.getText().toString().trim());
+                usuarioRef.child(userActivo).child("Descripcion").setValue(etDescripcion.getText().toString().trim());
                 Intent intent = new Intent(Descripcion.this, Perfil.class);
-                intent.putExtra("userID", userID);
+                intent.putExtra("userID", userActivo);
                 startActivity(intent);
             }
         });
@@ -57,6 +60,34 @@ public class Descripcion extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
     }
+
+    //barra de navegacion
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
+            new BottomNavigationView.OnNavigationItemSelectedListener(){
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
+                    Intent intent;
+                    switch (menuItem.getItemId()){
+                        case R.id.nav_add:
+                            intent = new Intent(Descripcion.this, SubirPublicacion.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_perfil:
+                            intent = new Intent(Descripcion.this, Perfil.class);
+                            intent.putExtra("userID", userActivo);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_search:
+                            intent = new Intent(Descripcion.this, MainActivity.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_favs:
+                            intent = new Intent(Descripcion.this, Favoritos.class);
+                            //intent.putExtra("userID", userID);
+                            startActivity(intent);
+                            break;
+                    }
+                    return true;
+                }
+            };
 }
