@@ -73,8 +73,6 @@ public class Publicacion extends AppCompatActivity {
 
         Bundle datos = this.getIntent().getExtras();
         publiID = datos.getString("publiID");                //publicacion ID
-        //userID = datos.getString("userID");        //ID de dueño publicacion
-        //Log.d("ID dueño", userID);
         Log.d("ID userOnline", userActivo );
     }
 
@@ -100,19 +98,13 @@ public class Publicacion extends AppCompatActivity {
                     btnEliminar.setVisibility(View.VISIBLE);
                 }
 
-                //descripcion = "<b>" + user + ": </b>" + descripcion;
-                //precio = "$ " + precio;
                 tvNombre.setText(nombre);
                 tvUser.setText(user);
-                //tvUser.setTypeface(null, Typeface.BOLD);
                 tvDescripcion.setText(descripcion);
                 tvPrecio.setText("$ " + precio);
-
-                Glide.with(Publicacion.this)
+                Glide.with(Publicacion.this)    //Le agrego un listener al glide para que cuando finaliza la carga desaparezca la progressbar
                         .load(link)
                         .fitCenter()
-                        //.centerCrop()
-                        //.placeholder(R.id.ProgressBar3)
                         .listener(new RequestListener<String, GlideDrawable>() {
                             @Override
                             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -137,20 +129,18 @@ public class Publicacion extends AppCompatActivity {
         userRef.child("Likes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("USEREF", publiID);
+                Log.d("PUBLI ID", publiID);
                 Boolean isLike = dataSnapshot.child(publiID).exists();
                 if(isLike){
                     ivLike.setImageResource(R.drawable.ic_corazon);
                     ivLike.setTag("Like");
                 };
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("CANCELADOOOOO", publiID);
             }
         });
-
     }
 
     //barra de navegacion
@@ -170,7 +160,6 @@ public class Publicacion extends AppCompatActivity {
                             break;
                         case R.id.nav_favs:
                             intent = new Intent(Publicacion.this, Favoritos.class);
-                            //intent.putExtra("userID", userID);
                             startActivity(intent);
                             break;
                         case R.id.nav_search:
@@ -178,34 +167,34 @@ public class Publicacion extends AppCompatActivity {
                             startActivity(intent);
                             break;
                     }
-
                     return true;
                 }
             };
 
+    //funcion para dar like o noLike al hacer "click" en el corazon
     public void like(View view){
-        //si el corazon esta activado "like" y es clickeado
-        if(ivLike.getTag().equals("Like")){
-            //userRef.child("Likes").child(id).setValue(false);
-            userRef.child("Likes").child(publiID).removeValue();      //entra a mi usuarios y saca el like a la publicacion
+        if(ivLike.getTag().equals("Like")){                                                  //si el corazon esta activado(Like)
+            userRef.child("Likes").child(publiID).removeValue();                            //entra a mi usuarios y saca el like a la publicacion
             publiRef.child(publiID).child("Likes").child(user.getUid()).removeValue();      //entra a la publicaciones y le saca el like de mi usuario
-            ivLike.setImageResource(R.drawable.ic_nolike);    //paso el corazon lleno a corazon vacio
-            ivLike.setTag("Unlike");   //le pongo el tag "unlike"
-        }else{
-            //si el corazon esta vacio "unlike"
-            userRef.child("Likes").child(publiID).setValue(true);   //entra a los likes del usuario activo y pone me gusta en la publicacion
-            publiRef.child(publiID).child("Likes").child(userID).setValue(true);    //entra a la publicacion y agrega el usuario activo
-            ivLike.setImageResource(R.drawable.ic_corazon);   //cambiamos la imagen al corazon lleno
-            ivLike.setTag("Like");   //le seteamos el tag like
+            ivLike.setImageResource(R.drawable.ic_nolike);                               //paso el corazon lleno a corazon vacio
+            ivLike.setTag("Unlike");                                                   //le pongo el tag "unlike"
+        }else{                                                                        //si el corazon esta vacio(unlike)
+            userRef.child("Likes").child(publiID).setValue(true);                     //entra a los likes del usuario activo y pone me gusta en la publicacion
+            publiRef.child(publiID).child("Likes").child(userActivo).setValue(true);      //entra a la publicacion y agrega el usuario activo
+            ivLike.setImageResource(R.drawable.ic_corazon);                           //cambiamos la imagen al corazon lleno
+            ivLike.setTag("Like");                                                    //le seteamos el tag like
         }
     }
 
+    //funcion para ir al perfil del dueño de la publicacion al clickear su nombre
     public void perfil(View view){
         Intent intent = new Intent(this, Perfil.class);
         intent.putExtra("userID", userID);
         startActivity(intent);
     }
 
+
+    //funcion para editar publicacion. le paso todos los datos actuales para que se carguen en la nueva activity
     public void editar(View view){
         Intent intent = new Intent(this, SubirPublicacion.class);
         intent.putExtra("publiID", publiID);
@@ -215,6 +204,7 @@ public class Publicacion extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //funcion para eliinar la publicacion
     public void eliminar(View view){
         Log.d("ELIMINAR", "ENTRA");
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -223,9 +213,9 @@ public class Publicacion extends AppCompatActivity {
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                publiRef.child(publiID).removeValue();
-                userRef.child("Publicaciones").child(publiID).removeValue();
-                perfil(btnEliminar);
+                publiRef.child(publiID).removeValue();                         //busco la publicacion por su id y la elimino
+                userRef.child("Publicaciones").child(publiID).removeValue();   //en el usuario entro a publicaciones y la borro de ahi tambien
+                perfil(btnEliminar);                                            //al finalizar redirigimos al perfil
             }
         });
         builder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {

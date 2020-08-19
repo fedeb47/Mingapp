@@ -127,11 +127,11 @@ public class SubirPublicacion extends AppCompatActivity {
                                     mensajeErorr = "Debes ponerle un precio al articulo";
                                     fError(mensajeErorr);
                                 }else{
-                                    Log.d("LINK DESCARGA", downloadUri.toString());
-                                    Publi p = new Publi(userID, Nombre, Link, Descripcion, Precio);        //creo objeto publicacion
                                     DatabaseReference publi = myRef.child("Publicaciones");                //referencio las publicaciones
                                     DatabaseReference userRef = myRef.child("usuarios").child(userID);     //referencio al usuario conectado
+                                    Log.d("LINK DESCARGA", downloadUri.toString());
                                     id = publi.push().getKey();                                            //creo y obtengo key para la publicacion
+                                    Publi p = new Publi(userID, Nombre, Link, Descripcion, Precio);        //creo objeto publicacion
                                     userRef.child("Publicaciones").child(id).setValue("true");      //creo una clave para cada publicacion dentro del user (?) sino me pisa el dato
                                     publi.child(id).setValue(p);                                           //cargo objeto Publicacion a la base de datos
                                     Publican();
@@ -147,6 +147,7 @@ public class SubirPublicacion extends AppCompatActivity {
             bEditar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     Nombre = etNombre.getText().toString();
                     Descripcion = etDescripcion.getText().toString();
                     Precio = (etPrecio.getText().toString());

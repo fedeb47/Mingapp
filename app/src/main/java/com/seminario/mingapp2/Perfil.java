@@ -202,15 +202,10 @@ public class Perfil extends AppCompatActivity {
         });
     }
 
-    public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();            //Desconecto Firebase
-        LoginManager.getInstance().logOut();             //Desconecto Facebook
-        goLoginScreen();                                 //Vuelvo al Login
-    }
+
 
     public void seguir(View view) {
         Log.d("BOTON--------", btnSeguir.getText().toString());
-
         if(btnSeguir.getText() == "Seguir"){
             Log.d("BOTON--------", "seguir");
             usuarioRef.child(user.getUid()).child("seguidos").child(userID).setValue(true);
@@ -244,11 +239,16 @@ public class Perfil extends AppCompatActivity {
                 Collections.reverse(lista);
                 fotoAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("publicaciones--", "cancelado");
             }
         });
+    }
+
+    public void logout(View view) {
+        FirebaseAuth.getInstance().signOut();            //Desconecto Firebase
+        LoginManager.getInstance().logOut();             //Desconecto Facebook
+        goLoginScreen();                                 //Vuelvo al Login
     }
 }

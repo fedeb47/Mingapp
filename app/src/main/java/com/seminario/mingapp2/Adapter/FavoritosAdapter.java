@@ -39,13 +39,10 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull FavoritosAdapter.ViewHolder holder, int position) {
-        Log.d("FavoritosADEPTER--", "entra");
         Publi publi = post.get(position);
-        Log.d("FavoritosADEPTER--", String.valueOf(position));
-        Log.d("FavoritsADEPTER--", publi.toString());
         Glide.with(context).load(publi.getLinkFoto()).into(holder.post_image);
         holder.nombre.setText(publi.getNombre());
-        holder.id.setText(publi.getID());
+        Log.d("ADEPTER--nombre:", publi.getNombre());
     }
 
     @Override
@@ -68,14 +65,14 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.View
 
         public ImageView post_image;
         public TextView nombre;
-        public TextView id;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             post_image = itemView.findViewById(R.id.post_image);
             nombre = itemView.findViewById(R.id.tvNombre);
-            id = itemView.findViewById(R.id.publiID);
+
         }
     }
 }

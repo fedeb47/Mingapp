@@ -21,12 +21,24 @@ public class Publi {
 
     public Publi() {}
 
-    public void setUserID(String userID) {
-        UserID = userID;
+    @Override
+    public String toString() {
+        return "Publi{" +
+                "ID='" + ID + '\'' +
+                ", UserID='" + UserID + '\'' +
+                ", Nombre='" + Nombre + '\'' +
+                ", LinkFoto='" + LinkFoto + '\'' +
+                ", Descripcion='" + Descripcion + '\'' +
+                ", Precio='" + Precio + '\'' +
+                '}';
     }
 
-    public void setID(String ID) {
-        ID = ID;
+    public String getID() { return ID; }
+
+    public void setID(String ID) { this.ID = ID; }
+
+    public void setUserID(String userID) {
+        UserID = userID;
     }
 
     public void setNombre(String nombre) {
@@ -47,9 +59,6 @@ public class Publi {
 
     public String getUserID() {
         return UserID;
-    }
-    public String getID() {
-        return ID;
     }
 
     public String getNombre() {
