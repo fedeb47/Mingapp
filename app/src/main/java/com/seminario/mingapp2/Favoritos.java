@@ -72,8 +72,8 @@ public class Favoritos extends AppCompatActivity {
             public void onClick(View v) {
                 Publi publi = publicaciones.get(recyclerView.getChildAdapterPosition(v));
                 Intent intent = new Intent(Favoritos.this, Publicacion.class);
-                intent.putExtra("publiID", publi.getUserID());             //ID de la publicacion
-                Log.d("PUBLICACION ID", publi.getUserID());             //este es el ID de la publicacion pero lo paso como user ID. arreglarlo en Favoritos
+                intent.putExtra("publiID", publi.UserID);             //ID de la publicacion
+                Log.d("PUBLICACION ID", publi.UserID);             //este es el ID de la publicacion pero lo paso como user ID. arreglarlo en Favoritos
                 startActivity(intent);
             }
         });
@@ -113,15 +113,17 @@ public class Favoritos extends AppCompatActivity {
                     }
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot2) {
-                            Log.d("MUTABLE DATA", dataSnapshot2.toString());
-                            String link = dataSnapshot2.child("LinkFoto").getValue(String.class);
-                            String nombre = dataSnapshot2.child("Nombre").getValue(String.class);
-                            publiID = dataSnapshot2.getKey();
-                            Log.d("A VER Q  UE ONDA EL ID", publiID);
-                            Publi p = new Publi(publiID, nombre, link, "", "");
-                            publicaciones.add(p);
-                            Collections.reverse(publicaciones);
-                            favAdapter.notifyDataSetChanged();
+                            if(dataSnapshot2.getValue() != null) {
+                                Log.d("MUTABLE DATA", dataSnapshot2.toString());
+                                String link = dataSnapshot2.child("LinkFoto").getValue(String.class);
+                                String nombre = dataSnapshot2.child("Nombre").getValue(String.class);
+                                publiID = dataSnapshot2.getKey();
+                                Log.d("A VER Q  UE ONDA EL ID", publiID);
+                                Publi p = new Publi("", link, nombre, "", publiID);
+                                publicaciones.add(p);
+                                Collections.reverse(publicaciones);
+                                favAdapter.notifyDataSetChanged();
+                            }
                         }
                     });
                 }

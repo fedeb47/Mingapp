@@ -40,9 +40,10 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.View
     @Override
     public void onBindViewHolder(@NonNull FavoritosAdapter.ViewHolder holder, int position) {
         Publi publi = post.get(position);
-        Glide.with(context).load(publi.getLinkFoto()).into(holder.post_image);
-        holder.nombre.setText(publi.getNombre());
-        Log.d("ADEPTER--nombre:", publi.getNombre());
+        //Glide.with(context).load(publi.getLinkFoto()).into(holder.post_image);
+        Glide.with(context).load(publi.LinkFoto).into(holder.post_image);
+        holder.nombre.setText(publi.Nombre);
+        Log.d("ADEPTER--nombre:", publi.Nombre);
     }
 
     @Override

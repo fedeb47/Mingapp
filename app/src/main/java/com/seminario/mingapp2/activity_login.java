@@ -40,12 +40,12 @@ public class activity_login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.d("ACTIVITY----", this.toString());
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
         loginButton.setVisibility(View.VISIBLE);
         progressBar = findViewById(R.id.progressBar);
+
 //-------------------AUTENTICACION FACEBOOK
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -73,7 +73,6 @@ public class activity_login extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Log.d("userrrrrr", user.getUid());
                     irapantallaprincipal();
                 }
             }
@@ -85,11 +84,8 @@ public class activity_login extends AppCompatActivity {
     private void handleFacebookAccessToken(AccessToken accessToken) {
         progressBar.setVisibility(View.VISIBLE);
         loginButton.setVisibility(View.GONE);
-       // loginButton.setVisibility(View.GONE);
-        //CREAMOS CREDENCIAL EN BASE AL TOKEN RECIBIDO
-        Log.d("111111111111", "llega");
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
-        Log.d("2222222222", "llega");
+
         //INICIAMOS SESION EN FIREBASE
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override

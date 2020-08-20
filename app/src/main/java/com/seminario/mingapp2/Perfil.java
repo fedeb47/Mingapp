@@ -27,7 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.seminario.mingapp2.Adapter.FotoAdapter;
-import com.seminario.mingapp2.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,8 +56,6 @@ public class Perfil extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
-        Log.d("ACTIVITY----", this.toString());
-        Log.d("creando perfil!!!!", user.getUid());
 
         ivFotoPerfil = (ImageView) findViewById(R.id.ivFotoPerfil);
         tvNombre = (TextView) findViewById(R.id.tvNombre);
@@ -104,35 +101,6 @@ public class Perfil extends AppCompatActivity {
 
     }
 
-    //barra de navegacion
-    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
-            new BottomNavigationView.OnNavigationItemSelectedListener(){
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
-                    Intent intent;
-                    switch (menuItem.getItemId()){
-                        case R.id.nav_add:
-                            intent = new Intent(Perfil.this, SubirPublicacion.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_search:
-                            intent = new Intent(Perfil.this, MainActivity.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_favs:
-                            intent = new Intent(Perfil.this, Favoritos.class);
-                            //intent.putExtra("userID", userID);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_perfil:
-                            intent = new Intent(Perfil.this, Perfil.class);
-                            startActivity(intent);
-                            break;
-                    }
-
-                    return true;
-                }
-            };
-
     protected void onStart() {
         super.onStart();
         usuarioRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -153,9 +121,6 @@ public class Perfil extends AppCompatActivity {
                         if (seguido == true) btnSeguir.setText("Dejar de seguir");
                     } else btnSeguir.setText("Seguir");
                 }
-
-                //Log.d("NOMBRE-----------------", nombre);
-                //Log.d("lo sigo?---------", seguido.toString());
 
                 tvNombre.setText(nombre);
                 tvDescripcion.setText(descripcion);
@@ -188,22 +153,20 @@ public class Perfil extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //calcular la cantidad de seguidores
     public void seguidores() {
         usuarioRef.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                tvSeguidores.setText("" + dataSnapshot.getChildrenCount());
+                tvSeguidores.setText("" + dataSnapshot.child("seguidores").getChildrenCount());
+                tvSeguidos.setText("" + dataSnapshot.child("seguidos").getChildrenCount());
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {     }
         });
     }
 
-
-
+    //Al presionar el boton de seguir usuario
     public void seguir(View view) {
         Log.d("BOTON--------", btnSeguir.getText().toString());
         if(btnSeguir.getText() == "Seguir"){
@@ -246,9 +209,43 @@ public class Perfil extends AppCompatActivity {
         });
     }
 
+    //LOGOUT
     public void logout(View view) {
         FirebaseAuth.getInstance().signOut();            //Desconecto Firebase
         LoginManager.getInstance().logOut();             //Desconecto Facebook
         goLoginScreen();                                 //Vuelvo al Login
     }
+
+    //barra de navegacion
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
+            new BottomNavigationView.OnNavigationItemSelectedListener(){
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
+                    Intent intent;
+                    switch (menuItem.getItemId()){
+                        case R.id.nav_add:
+                            intent = new Intent(Perfil.this, SubirPublicacion.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_search:
+                            intent = new Intent(Perfil.this, MainActivity.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_favs:
+                            intent = new Intent(Perfil.this, Favoritos.class);
+                            //intent.putExtra("userID", userID);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_perfil:
+                            intent = new Intent(Perfil.this, Perfil.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_mess:
+                            intent = new Intent(Perfil.this, VentanadeChat.class);
+                            startActivity(intent);
+                            break;
+                    }
+
+                    return true;
+                }
+            };
 }

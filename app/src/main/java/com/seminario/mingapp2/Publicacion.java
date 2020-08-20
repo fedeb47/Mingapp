@@ -28,7 +28,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.seminario.mingapp2.R;
 
 public class Publicacion extends AppCompatActivity {
     private ImageView fotoSubida;
@@ -74,6 +73,7 @@ public class Publicacion extends AppCompatActivity {
         Bundle datos = this.getIntent().getExtras();
         publiID = datos.getString("publiID");                //publicacion ID
         Log.d("ID userOnline", userActivo );
+        Log.d("ID PUBLI", publiID );
     }
 
     protected void onStart() {
@@ -143,34 +143,6 @@ public class Publicacion extends AppCompatActivity {
         });
     }
 
-    //barra de navegacion
-    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
-            new BottomNavigationView.OnNavigationItemSelectedListener(){
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
-                    Intent intent;
-                    switch (menuItem.getItemId()){
-                        case R.id.nav_add:
-                            intent = new Intent(Publicacion.this, SubirPublicacion.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_perfil:
-                            intent = new Intent(Publicacion.this, Perfil.class);
-                            intent.putExtra("userID", userActivo);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_favs:
-                            intent = new Intent(Publicacion.this, Favoritos.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_search:
-                            intent = new Intent(Publicacion.this, MainActivity.class);
-                            startActivity(intent);
-                            break;
-                    }
-                    return true;
-                }
-            };
-
     //funcion para dar like o noLike al hacer "click" en el corazon
     public void like(View view){
         if(ivLike.getTag().equals("Like")){                                                  //si el corazon esta activado(Like)
@@ -200,7 +172,8 @@ public class Publicacion extends AppCompatActivity {
         intent.putExtra("publiID", publiID);
         intent.putExtra("nombre", tvNombre.getText());
         intent.putExtra("descripcion", tvDescripcion.getText());
-        intent.putExtra("precio", tvPrecio.getText());
+        String precio = tvPrecio.getText().toString();
+        intent.putExtra("precio", precio.substring(1));
         startActivity(intent);
     }
 
@@ -227,4 +200,36 @@ public class Publicacion extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    //barra de navegacion
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
+            new BottomNavigationView.OnNavigationItemSelectedListener(){
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
+                    Intent intent;
+                    switch (menuItem.getItemId()){
+                        case R.id.nav_add:
+                            intent = new Intent(Publicacion.this, SubirPublicacion.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_perfil:
+                            intent = new Intent(Publicacion.this, Perfil.class);
+                            intent.putExtra("userID", userActivo);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_favs:
+                            intent = new Intent(Publicacion.this, Favoritos.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_search:
+                            intent = new Intent(Publicacion.this, MainActivity.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_mess:
+                            intent = new Intent(Publicacion.this, VentanadeChat.class);
+                            startActivity(intent);
+                            break;
+                    }
+                    return true;
+                }
+            };
 }

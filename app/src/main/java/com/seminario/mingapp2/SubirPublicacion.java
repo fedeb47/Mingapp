@@ -131,10 +131,10 @@ public class SubirPublicacion extends AppCompatActivity {
                                     DatabaseReference userRef = myRef.child("usuarios").child(userID);     //referencio al usuario conectado
                                     Log.d("LINK DESCARGA", downloadUri.toString());
                                     id = publi.push().getKey();                                            //creo y obtengo key para la publicacion
-                                    Publi p = new Publi(userID, Nombre, Link, Descripcion, Precio);        //creo objeto publicacion
+                                    Publi p = new Publi(Descripcion, Link, Nombre, Precio, userID);        //creo objeto publicacion
                                     userRef.child("Publicaciones").child(id).setValue("true");      //creo una clave para cada publicacion dentro del user (?) sino me pisa el dato
                                     publi.child(id).setValue(p);                                           //cargo objeto Publicacion a la base de datos
-                                    Publican();
+                                    Publican(id);
                                 }
                             }
                         }
@@ -147,7 +147,6 @@ public class SubirPublicacion extends AppCompatActivity {
             bEditar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Nombre = etNombre.getText().toString();
                     Descripcion = etDescripcion.getText().toString();
                     Precio = (etPrecio.getText().toString());
@@ -165,7 +164,6 @@ public class SubirPublicacion extends AppCompatActivity {
                                 mensajeErorr = "Debes ponerle un precio al articulo";
                                 fError(mensajeErorr);
                             }else{
-                                Publi p = new Publi(userID, Nombre, Link, Descripcion, Precio);        //creo objeto publicacion
                                 Map<String, Object> publiEdit = new HashMap<>();
                                 publiEdit.put("Nombre", Nombre);
                                 publiEdit.put("Descripcion", Descripcion);
@@ -173,7 +171,7 @@ public class SubirPublicacion extends AppCompatActivity {
                                 DatabaseReference publi = myRef.child("Publicaciones");                //referencio las publicaciones
                                 publi.child(publiID).updateChildren(publiEdit);      //creo una clave para cada publicacion dentro del user (?) sino me pisa el dato
                                //cargo objeto Publicacion a la base de datos
-                                Publican();
+                                Publican(publiID);
                             }
                         }
                     }
@@ -183,46 +181,19 @@ public class SubirPublicacion extends AppCompatActivity {
             //EDITAR PUBLICACION
             Bundle datos = this.getIntent().getExtras();
             try {
-                publiID = datos.getString("publiID");
                 etNombre.setText(datos.getString("nombre"));
                 etDescripcion.setText(datos.getString("descripcion"));
                 etPrecio.setText(datos.getString("precio"));
+                publiID = datos.getString("publiID");
                 bExaminar.setVisibility(View.GONE);
                 bPublicar.setVisibility(View.GONE);
                 bEditar.setVisibility(View.VISIBLE);
             }catch(Exception e){ };
         }
 
-    //barra de navegacion
-    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
-            new BottomNavigationView.OnNavigationItemSelectedListener(){
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
-                    Intent intent;
-                    switch (menuItem.getItemId()){
-                        case R.id.nav_add:
-                            intent = new Intent(SubirPublicacion.this, SubirPublicacion.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_perfil:
-                            intent = new Intent(SubirPublicacion.this, Perfil.class);
-                            intent.putExtra("userID", userID);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_favs:
-                            intent = new Intent(SubirPublicacion.this, Favoritos.class);
-                            //intent.putExtra("userID", userID);
-                            startActivity(intent);
-                            break;
-                        case R.id.nav_search:
-                            intent = new Intent(SubirPublicacion.this, MainActivity.class);
-                            startActivity(intent);
-                            break;
-                    }
-                    return true;
-                }
-            };
 
 
+    //SE EJECUTA CUANDO TERMINA DE SUBIR LA FOTO
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -256,7 +227,7 @@ public class SubirPublicacion extends AppCompatActivity {
         }
     }
 
-    public void Publican(){
+    public void Publican(String publiID){
         Intent intent = new Intent(this, Publicacion.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("userID", userID);
@@ -295,5 +266,38 @@ public class SubirPublicacion extends AppCompatActivity {
         tvError.setVisibility(View.VISIBLE);
         tvError.setText(er);
     }
+
+    //barra de navegacion
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener=
+            new BottomNavigationView.OnNavigationItemSelectedListener(){
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
+                    Intent intent;
+                    switch (menuItem.getItemId()){
+                        case R.id.nav_add:
+                            intent = new Intent(SubirPublicacion.this, SubirPublicacion.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_perfil:
+                            intent = new Intent(SubirPublicacion.this, Perfil.class);
+                            intent.putExtra("userID", userID);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_favs:
+                            intent = new Intent(SubirPublicacion.this, Favoritos.class);
+                            //intent.putExtra("userID", userID);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_search:
+                            intent = new Intent(SubirPublicacion.this, MainActivity.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.nav_mess:
+                            intent = new Intent(SubirPublicacion.this, VentanadeChat.class);
+                            startActivity(intent);
+                            break;
+                    }
+                    return true;
+                }
+            };
 
 }
