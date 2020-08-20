@@ -22,7 +22,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7dp"
         android:ems="10"
-        android:hint="Busca por producto o ubicacion"
+        android:hint="Escribe lo que estas buscando"
         android:inputType="textPersonName"
         tools:visibility="invisible" />
 

@@ -3,7 +3,6 @@ package com.seminario.mingapp2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -40,8 +38,6 @@ public class Publicacion extends AppCompatActivity {
     private Button btnEditar;
     private Button btnEliminar;
     private BottomNavigationView barra;
-
-
     private String publiID;
     private String userID;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -55,7 +51,6 @@ public class Publicacion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicacion);
-        Log.d("ACTIVITY----", this.toString());
 
         fotoSubida = (ImageView) findViewById(R.id.ivFotoPublicacion);
         tvNombre = (TextView) findViewById(R.id.tvNombre);
@@ -66,14 +61,14 @@ public class Publicacion extends AppCompatActivity {
         ivLike = (ImageView) findViewById(R.id.ivLike);
         btnEditar = (Button) findViewById(R.id.btnEditar);
         btnEliminar = (Button) findViewById(R.id.btnEliminar);
-        barra = findViewById(R.id.bottom_navigation);
 
+        //BARRA DE NAVEGACION INICIALIZO Y PONGO LISTENER
+        barra = findViewById(R.id.bottom_navigation);
         barra.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
+        //pido los datos que me pasan por el intent
         Bundle datos = this.getIntent().getExtras();
         publiID = datos.getString("publiID");                //publicacion ID
-        Log.d("ID userOnline", userActivo );
-        Log.d("ID PUBLI", publiID );
     }
 
     protected void onStart() {
@@ -83,7 +78,6 @@ public class Publicacion extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("MYREF", publiID);
                 progressBar.setVisibility(View.VISIBLE);
                 String nombre = dataSnapshot.child("Publicaciones").child(publiID).child("Nombre").getValue(String.class);
                 String link = dataSnapshot.child("Publicaciones").child(publiID).child("LinkFoto").getValue(String.class);
@@ -129,7 +123,6 @@ public class Publicacion extends AppCompatActivity {
         userRef.child("Likes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("PUBLI ID", publiID);
                 Boolean isLike = dataSnapshot.child(publiID).exists();
                 if(isLike){
                     ivLike.setImageResource(R.drawable.ic_corazon);
@@ -138,7 +131,6 @@ public class Publicacion extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("CANCELADOOOOO", publiID);
             }
         });
     }
@@ -147,7 +139,7 @@ public class Publicacion extends AppCompatActivity {
     public void like(View view){
         if(ivLike.getTag().equals("Like")){                                                  //si el corazon esta activado(Like)
             userRef.child("Likes").child(publiID).removeValue();                            //entra a mi usuarios y saca el like a la publicacion
-            publiRef.child(publiID).child("Likes").child(user.getUid()).removeValue();      //entra a la publicaciones y le saca el like de mi usuario
+            publiRef.child(publiID).child("Likes").child(userActivo).removeValue();      //entra a la publicaciones y le saca el like de mi usuario
             ivLike.setImageResource(R.drawable.ic_nolike);                               //paso el corazon lleno a corazon vacio
             ivLike.setTag("Unlike");                                                   //le pongo el tag "unlike"
         }else{                                                                        //si el corazon esta vacio(unlike)
@@ -161,6 +153,7 @@ public class Publicacion extends AppCompatActivity {
     //funcion para ir al perfil del dueño de la publicacion al clickear su nombre
     public void perfil(View view){
         Intent intent = new Intent(this, Perfil.class);
+        Log.d("USERID", userID);
         intent.putExtra("userID", userID);
         startActivity(intent);
     }

@@ -2,21 +2,17 @@ package com.seminario.mingapp2;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.seminario.mingapp2.R;
 
 public class Descripcion extends AppCompatActivity {
     private EditText etDescripcion;
@@ -43,17 +39,18 @@ public class Descripcion extends AppCompatActivity {
         String back = datos.getString("back");
         etDescripcion.setText(back);
 
+        //AL ACEPTAR GUARDAMOS EN BASE DE DATOS Y VOLVEMOS AL PERFIL
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("descipcionnnnnn", String.valueOf(etDescripcion.getText()));
-                usuarioRef.child(userActivo).child("Descripcion").setValue(etDescripcion.getText().toString().trim());
-                Intent intent = new Intent(Descripcion.this, Perfil.class);
-                intent.putExtra("userID", userActivo);
+                usuarioRef.child(userActivo).child("Descripcion").setValue(etDescripcion.getText().toString().trim());    //guardo en la base de datos la nueva descripcion
+                Intent intent = new Intent(Descripcion.this, Perfil.class);                                //vuelvo al perfil
+                intent.putExtra("userID", userActivo);                                                             //le paso el usuariio activo
                 startActivity(intent);
             }
         });
 
+        //AL CANCELAR VOLVEMOS ATRAS
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

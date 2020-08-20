@@ -5,7 +5,7 @@ import android.app.Application;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
-public class Mingapp extends Application {
+public class Mingapp extends Application {    //CLASE UTILIZADA PARA ACTIVAR LA APLICACION EN FACEBOOK
 
     @Override
     public void onCreate() {

@@ -117,7 +117,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="40dp"
         android:layout_below="@id/btnEditar">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -133,7 +134,8 @@
         android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"

@@ -39,12 +39,9 @@ public class BusquedaAdapter extends RecyclerView.Adapter<BusquedaAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull BusquedaAdapter.ViewHolder holder, int position) {
-        Log.d("arrayPadre", lista.size() + "-------" + lista.toString());
         publi = lista.get(position);
-        Log.d("arrayHijo", "pos: " + position + "------" + publi.toString());
         holder.id.setText(publi.get(0));
         holder.nombre.setText(publi.get(1));
-        //Log.d("VISTAAAAAAAAA", publi.get(2).toString());
         Glide.with(context).load(publi.get(2)).into(holder.imagen);
     }
 
@@ -69,14 +66,12 @@ public class BusquedaAdapter extends RecyclerView.Adapter<BusquedaAdapter.ViewHo
         public TextView id;
         public TextView nombre;
         public ImageView imagen;
-        //public TextView usuario;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             id = itemView.findViewById(R.id.publiID);
             nombre = itemView.findViewById(R.id.tvNombre);
-            //usuario = itemView.findViewById(R.id.tvUser1);
             imagen = itemView.findViewById(R.id.ivFoto1);
         }
     }

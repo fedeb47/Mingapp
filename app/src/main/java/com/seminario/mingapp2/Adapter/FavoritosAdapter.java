@@ -1,20 +1,16 @@
 package com.seminario.mingapp2.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.seminario.mingapp2.Modelos.Publi;
 import com.seminario.mingapp2.R;
-
 import java.util.List;
 
 public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.ViewHolder>
@@ -40,10 +36,8 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.View
     @Override
     public void onBindViewHolder(@NonNull FavoritosAdapter.ViewHolder holder, int position) {
         Publi publi = post.get(position);
-        //Glide.with(context).load(publi.getLinkFoto()).into(holder.post_image);
         Glide.with(context).load(publi.LinkFoto).into(holder.post_image);
         holder.nombre.setText(publi.Nombre);
-        Log.d("ADEPTER--nombre:", publi.Nombre);
     }
 
     @Override
@@ -63,17 +57,14 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-
         public ImageView post_image;
         public TextView nombre;
-
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             post_image = itemView.findViewById(R.id.post_image);
             nombre = itemView.findViewById(R.id.tvNombre);
-
         }
     }
 }
